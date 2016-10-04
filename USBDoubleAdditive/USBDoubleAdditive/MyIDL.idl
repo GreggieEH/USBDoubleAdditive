@@ -1,0 +1,93 @@
+// MyIDL.idl
+// IDL file for the Simple Com object
+
+#include "dispids.h"
+
+[
+	uuid(85A20DE7-43EC-4209-8F41-F64C8177CF27),
+	helpstring(""),
+	version(1.0)
+]
+library USBDoubleAdditive
+{
+	importlib("stdole32.tlb");
+	import "IMono.idl";
+	[
+		uuid(023B9FE8-6191-4aca-85C1-25D361D65F51),
+		helpstring("Interface")
+	]
+	dispinterface IUSBDoubleAdditive
+	{
+	properties:
+		[id(DISPID_MonoDecoupled), bindable, helpstring("Mono decoupled flag")]
+		VARIANT_BOOL		MonoDecoupled;
+		[id(DISPID_ActiveMono), bindable, helpstring("Active monochromator")]
+		BSTR				ActiveMono;
+		[id(DISPID_SystemInit), bindable, helpstring("System initialized")]
+		VARIANT_BOOL		SystemInit;
+		[id(DISPID_Grating), bindable, helpstring("Current grating")]
+		long				Grating;
+		[id(DISPID_ReInitOnScanStart), bindable, helpstring("Re initialization on scan start")]
+		VARIANT_BOOL		ReInitOnScanStart;
+	methods:
+		[id(DISPID_DisplayMonoSetup), helpstring("Display setup for given mono")]
+		void				DisplayMonoSetup(
+								[in]		BSTR		Mono);
+		[id(DISPID_SetMonoPosition), helpstring("Set position for given mono")]
+		VARIANT_BOOL		SetMonoPosition(
+								[in]		BSTR		Mono,
+								[in]		double		position);
+		[id(DISPID_GetMonoPosition), helpstring("Get position for given mono")]
+		double				GetMonoPosition(
+								[in]		BSTR		Mono);
+		[id(DISPID_DisplayMonoConfigValues), helpstring("Display mono configuration values")]
+		void				DisplayMonoConfigValues(
+								[in]		BSTR		Mono);
+		[id(DISPID_GetMonoGrating), helpstring("get the grating for a specific mono")]
+		long				GetMonoGrating(
+								[in]		BSTR		Mono);
+		[id(DISPID_SetMonoGrating), helpstring("Set the grating for a specific mono")]
+		void				SetMonoGrating(
+								[in]		BSTR		Mono,
+								[in]		long		grating);
+		[id(DISPID_GetMonoAutoGrating), helpstring("Get auto grating flag for a specific mono")]
+		VARIANT_BOOL		GetMonoAutoGrating(
+								[in]		BSTR		Mono);
+		[id(DISPID_SetMonoAutoGrating), helpstring("Set auto grating flag for a specific mono")]
+		void				SetMonoAutoGrating(
+								[in]		BSTR			Mono,
+								[in]		VARIANT_BOOL	AutoGrating);
+	}
+	[
+		uuid(89C2E949-342C-4c0f-AD32-26FE966EC70A),
+		helpstring(" event interface")
+	]
+	dispinterface _USBDoubleAdditive
+	{
+	properties:
+	methods:
+		[id(DISPID_MonoPositionChanged), helpstring("Mono position changed")]
+		void				MonoPositionChanged(
+								[in]		BSTR		Mono,
+								[in]		double		position);
+		[id(DISPID_MonoGratingChanged), helpstring("Mono grating changed")]
+		void				MonoGratingChanged(
+								[in]		BSTR		Mono,
+								[in]		long		grating);
+		[id(DISPID_MonoAutoGratingChanged), helpstring("Mono auto grating property change")]
+		void				MonoAutoGratingChanged(
+								[in]		BSTR			Mono,
+								[in]		VARIANT_BOOL	AutoGrating);
+	}
+	[
+		uuid(E68C56D2-0AC6-433e-8B26-255813847301),
+		helpstring("class")
+	]
+	coclass USBDoubleAdditive
+	{
+		[default]				dispinterface		IUSBDoubleAdditive;
+		[default, source]		dispinterface		_USBDoubleAdditive;
+								interface			_clsIMono;
+		[source]				dispinterface		__clsIMono;
+	}
+}
